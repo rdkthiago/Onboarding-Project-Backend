@@ -10,13 +10,6 @@ import { RegistrationModule } from './registration/registration.module';
     }),
     TypeOrmModule.forRootAsync({
   useFactory: () => {
-    console.log('ENV DEBUG:', {
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      user: process.env.DB_USER,
-      db: process.env.DB_NAME,
-    });
-
     return {
       type: 'postgres',
       host: process.env.DB_HOST,
