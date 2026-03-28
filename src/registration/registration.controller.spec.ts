@@ -5,16 +5,27 @@ import { RegistrationService } from './registration.service';
 describe('RegistrationController', () => {
   let controller: RegistrationController;
 
+  const mockRegistrationService = {
+    startOrResume: jest.fn(),
+    verifyMfa: jest.fn(),
+    updateAddress: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RegistrationController],
-      providers: [RegistrationService],
+      providers: [
+        {
+          provide: RegistrationService,
+          useValue: mockRegistrationService,
+        },
+      ],
     }).compile();
 
     controller = module.get<RegistrationController>(RegistrationController);
   });
 
-  it('should be defined', () => {
+  it('deve ser definido', () => {
     expect(controller).toBeDefined();
   });
 });
