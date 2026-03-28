@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
-import { CreateRegistrationDto } from './dto/create-registration.dto';
-import { UpdateRegistrationDto } from './dto/update-registration.dto';
+import { StartRegistrationDto } from './dto/start-registration.dto';
+import { VerifyMfaDto } from './dto/verify-mfa.dto';
+import { UpdateAddressDto } from './dto/update-address.dto';
 
 @Controller('registration')
 export class RegistrationController {
   constructor(private readonly registrationService: RegistrationService) {}
 
-  @Post()
-  create(@Body() createRegistrationDto: CreateRegistrationDto) {
-    return this.registrationService.create(createRegistrationDto);
+  @Post('start')
+  async startOrResume(@Body() startRegistrationDto: StartRegistrationDto) {
+    return this.registrationService.startOrResume(startRegistrationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.registrationService.findAll();
+  @Post('verify-mfa')
+  async verifyMfa(@Body() verifyMfaDto: VerifyMfaDto) {
+    return this.registrationService.verifyMfa(verifyMfaDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.registrationService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRegistrationDto: UpdateRegistrationDto) {
-    return this.registrationService.update(+id, updateRegistrationDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.registrationService.remove(+id);
+  @Patch(':id/address')
+  async updateAddress(
+    @Param('id') id: string,
+    @Body() updateAddressDto: UpdateAddressDto,
+  ) {
+    return this.registrationService.updateAddress(
+      id,
+      updateAddressDto.zipCode,
+      updateAddressDto.number,
+      updateAddressDto.complement,
+    );
   }
 }

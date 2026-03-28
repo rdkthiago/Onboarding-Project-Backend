@@ -18,6 +18,9 @@ export class Registration {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
+  @Column({ type: 'varchar', length: 6, nullable: true })
+  mfaCode: string | null;
+
   @Column({ type: 'varchar', length: 20, nullable: true })
   document: string; 
 
