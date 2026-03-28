@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ConfigModule } from '@nestjs/config';
     };
   },
 }),
+    RegistrationModule,
     
   ],
   controllers: [],
