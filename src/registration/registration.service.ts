@@ -108,4 +108,24 @@ export class RegistrationService {
     
     return this.registrationRepository.save(registration);
   }
+
+  async updateDocument(id: string, document: string) {
+    const registration = await this.registrationRepository.findOne({ where: { id } });
+    if (!registration) throw new NotFoundException('Cadastro não encontrado.');
+
+    registration.document = document;
+    registration.currentStep = RegistrationStep.CONTACT; // Avança para o próximo passo
+
+    return this.registrationRepository.save(registration);
+  }
+
+  async updateContact(id: string, phone: string) {
+    const registration = await this.registrationRepository.findOne({ where: { id } });
+    if (!registration) throw new NotFoundException('Cadastro não encontrado.');
+
+    registration.phone = phone;
+    registration.currentStep = RegistrationStep.ADDRESS; // Avança para o próximo passo
+
+    return this.registrationRepository.save(registration);
+  }
 }
