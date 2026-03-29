@@ -22,7 +22,7 @@ export class Registration {
   mfaCode: string | null;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  document: string; 
+  document: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone: string;
@@ -56,11 +56,14 @@ export class Registration {
   currentStep: RegistrationStep;
 
   @CreateDateColumn()
-  startedAt: Date; 
+  startedAt: Date;
 
   @UpdateDateColumn()
   lastUpdatedAt: Date;
 
   @Column({ type: 'timestamp', nullable: true })
   finishedAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  abandonmentEmailSentAt: Date | null;
 }

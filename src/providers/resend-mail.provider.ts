@@ -5,7 +5,7 @@ import { IMailProvider } from './mail.provider.interface';
 export class ResendMailProvider implements IMailProvider {
   async sendEmail(to: string, subject: string, body: string): Promise<void> {
     const apiKey = process.env.RESEND_API_KEY;
-    
+
     if (!apiKey) {
       console.warn('RESEND_API_KEY not found. Simulating sending an email...');
       console.log(`[SIMULATED E-MAIL] TO: ${to} | SUBJECT: ${subject}`);
@@ -17,10 +17,10 @@ export class ResendMailProvider implements IMailProvider {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          from: 'onboarding@resend.dev', 
+          from: 'onboarding@resend.dev',
           to,
           subject,
           html: body,

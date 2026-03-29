@@ -9,13 +9,13 @@ import { MAIL_PROVIDER } from '../providers/mail.provider.interface';
 import { ResendMailProvider } from '../providers/resend-mail.provider';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Registration])], 
+  imports: [TypeOrmModule.forFeature([Registration])],
   controllers: [RegistrationController],
   providers: [
     RegistrationService,
     {
-      provide: CEP_PROVIDER, 
-      useClass: ViaCepProvider, 
+      provide: CEP_PROVIDER,
+      useClass: ViaCepProvider,
     },
     {
       provide: MAIL_PROVIDER,

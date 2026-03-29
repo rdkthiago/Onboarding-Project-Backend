@@ -35,8 +35,11 @@ describe('RegistrationController', () => {
     it('deve repassar a chamada para o serviço com id e documento', async () => {
       const dto = { document: '12345678900' };
       await controller.updateDocument('123', dto);
-      
-      expect(mockRegistrationService.updateDocument).toHaveBeenCalledWith('123', '12345678900');
+
+      expect(mockRegistrationService.updateDocument).toHaveBeenCalledWith(
+        '123',
+        '12345678900',
+      );
     });
   });
 
@@ -44,8 +47,11 @@ describe('RegistrationController', () => {
     it('deve repassar a chamada para o serviço com id e telefone', async () => {
       const dto = { phone: '11999999999' };
       await controller.updateContact('123', dto);
-      
-      expect(mockRegistrationService.updateContact).toHaveBeenCalledWith('123', '11999999999');
+
+      expect(mockRegistrationService.updateContact).toHaveBeenCalledWith(
+        '123',
+        '11999999999',
+      );
     });
   });
 });

@@ -38,7 +38,10 @@ export class RegistrationController {
     @Param('id') id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
   ) {
-    return this.registrationService.updateDocument(id, updateDocumentDto.document);
+    return this.registrationService.updateDocument(
+      id,
+      updateDocumentDto.document,
+    );
   }
 
   @Patch(':id/contact')

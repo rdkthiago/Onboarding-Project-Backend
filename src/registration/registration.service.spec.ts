@@ -44,20 +44,28 @@ describe('RegistrationService', () => {
     expect(service).toBeDefined();
   });
 
-  
-
   describe('startOrResume', () => {
     it('deve iniciar um cadastro novo se o e-mail não existir', async () => {
       mockRegistrationRepository.findOne.mockResolvedValue(null);
-      
-      const newReg = { id: '123', name: 'João', email: 'joao@teste.com', currentStep: RegistrationStep.DOCUMENT };
-      
+
+      const newReg = {
+        id: '123',
+        name: 'João',
+        email: 'joao@teste.com',
+        currentStep: RegistrationStep.DOCUMENT,
+      };
+
       mockRegistrationRepository.create.mockReturnValue(newReg);
       mockRegistrationRepository.save.mockResolvedValue(newReg);
 
-      const result = await service.startOrResume({ name: 'João', email: 'joao@teste.com' });
+      const result = await service.startOrResume({
+        name: 'João',
+        email: 'joao@teste.com',
+      });
 
-      expect(mockRegistrationRepository.findOne).toHaveBeenCalledWith({ where: { email: 'joao@teste.com' } });
+      expect(mockRegistrationRepository.findOne).toHaveBeenCalledWith({
+        where: { email: 'joao@teste.com' },
+      });
       expect(mockRegistrationRepository.create).toHaveBeenCalled();
       expect(mockRegistrationRepository.save).toHaveBeenCalled();
       expect(result.requireMfa).toBe(false);
@@ -72,25 +80,31 @@ describe('RegistrationService', () => {
       });
 
       await expect(
-        service.startOrResume({ name: 'Maria', email: 'maria@teste.com' })
+        service.startOrResume({ name: 'Maria', email: 'maria@teste.com' }),
       ).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('updateDocument', () => {
     it('deve atualizar o documento e avançar para a etapa CONTACT', async () => {
-      const mockReg = { id: '123', document: null, currentStep: RegistrationStep.DOCUMENT };
-      
+      const mockReg = {
+        id: '123',
+        document: null,
+        currentStep: RegistrationStep.DOCUMENT,
+      };
+
       mockRegistrationRepository.findOne.mockResolvedValue(mockReg);
-      mockRegistrationRepository.save.mockResolvedValue({ 
-        ...mockReg, 
-        document: '12345678900', 
-        currentStep: RegistrationStep.CONTACT 
+      mockRegistrationRepository.save.mockResolvedValue({
+        ...mockReg,
+        document: '12345678900',
+        currentStep: RegistrationStep.CONTACT,
       });
 
       const result = await service.updateDocument('123', '12345678900');
 
-      expect(mockRegistrationRepository.findOne).toHaveBeenCalledWith({ where: { id: '123' } });
+      expect(mockRegistrationRepository.findOne).toHaveBeenCalledWith({
+        where: { id: '123' },
+      });
       expect(mockRegistrationRepository.save).toHaveBeenCalled();
       expect(result.document).toBe('12345678900');
       expect(result.currentStep).toBe(RegistrationStep.CONTACT);
@@ -99,24 +113,32 @@ describe('RegistrationService', () => {
     it('deve lançar NotFoundException se o cadastro não for encontrado', async () => {
       mockRegistrationRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.updateDocument('123', '12345678900')).rejects.toThrow(NotFoundException);
+      await expect(
+        service.updateDocument('123', '12345678900'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('updateContact', () => {
     it('deve atualizar o telefone e avançar para a etapa ADDRESS', async () => {
-      const mockReg = { id: '123', phone: null, currentStep: RegistrationStep.CONTACT };
-      
+      const mockReg = {
+        id: '123',
+        phone: null,
+        currentStep: RegistrationStep.CONTACT,
+      };
+
       mockRegistrationRepository.findOne.mockResolvedValue(mockReg);
-      mockRegistrationRepository.save.mockResolvedValue({ 
-        ...mockReg, 
-        phone: '11999999999', 
-        currentStep: RegistrationStep.ADDRESS 
+      mockRegistrationRepository.save.mockResolvedValue({
+        ...mockReg,
+        phone: '11999999999',
+        currentStep: RegistrationStep.ADDRESS,
       });
 
       const result = await service.updateContact('123', '11999999999');
 
-      expect(mockRegistrationRepository.findOne).toHaveBeenCalledWith({ where: { id: '123' } });
+      expect(mockRegistrationRepository.findOne).toHaveBeenCalledWith({
+        where: { id: '123' },
+      });
       expect(mockRegistrationRepository.save).toHaveBeenCalled();
       expect(result.phone).toBe('11999999999');
       expect(result.currentStep).toBe(RegistrationStep.ADDRESS);
@@ -125,7 +147,9 @@ describe('RegistrationService', () => {
     it('deve lançar NotFoundException se o cadastro não for encontrado', async () => {
       mockRegistrationRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.updateContact('123', '11999999999')).rejects.toThrow(NotFoundException);
+      await expect(service.updateContact('123', '11999999999')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
