@@ -11,5 +11,21 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  api:
+    build:
+      context: .
+    container_name: onboarding_api
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db 
+      - DB_PORT=5432 
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=onboarding_db
+      - RESEND_API_KEY=${RESEND_API_KEY} 
+    depends_on:
+      - db
+
 volumes:
   pgdata:

@@ -14,7 +14,7 @@ import { RegistrationModule } from './registration/registration.module';
       useFactory: () => {
         return {
           type: 'postgres',
-          host: process.env.DB_HOST,
+          host: process.env.DB_HOST || 'localhost',
           port: parseInt(process.env.DB_PORT || '5433', 10),
           username: process.env.DB_USER,
           password: process.env.DB_PASSWORD,
