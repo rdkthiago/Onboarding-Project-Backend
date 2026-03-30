@@ -39,15 +39,18 @@ cd onboarding-backend
 
 **2. Configure as Variáveis de Ambiente**
 Crie um arquivo `.env` na raiz do projeto e adicione suas credenciais, especialmente a chave do Resend:
+```
 DB_HOST=db
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_NAME=onboarding_db
 RESEND_API_KEY=sua_chave_aqui
+```
 
 **3. Suba os containers**
 docker-compose up -d --build
+
 *(O parâmetro `-d` roda os containers em segundo plano. A API estará disponível na porta `3000` e o PostgreSQL na porta `5433` para acesso externo).*
 
 ## 📖 Documentação da API (Swagger)
