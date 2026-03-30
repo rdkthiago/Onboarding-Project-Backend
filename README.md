@@ -35,6 +35,7 @@ A aplicação foi "dockerizada" para facilitar a avaliação, subindo o Banco de
 ```bash
 git clone https://github.com/rdkthiago/Onboarding-Project-Backend.git
 cd onboarding-backend
+```
 
 **2. Configure as Variáveis de Ambiente**
 Crie um arquivo `.env` na raiz do projeto e adicione suas credenciais, especialmente a chave do Resend:
@@ -49,13 +50,13 @@ RESEND_API_KEY=sua_chave_aqui
 docker-compose up -d --build
 *(O parâmetro `-d` roda os containers em segundo plano. A API estará disponível na porta `3000` e o PostgreSQL na porta `5433` para acesso externo).*
 
-## Documentação da API (Swagger)
+## 📖 Documentação da API (Swagger)
 
 Com a aplicação rodando, acesse o link abaixo no seu navegador para visualizar o contrato completo da API, testar os endpoints e ver os schemas (DTOs):
 
-**[http://localhost:3000/api/docs](http://localhost:3000/api/docs)**
+👉 **[http://localhost:3000/api/docs](http://localhost:3000/api/docs)**
 
-## Como Rodar os Testes e Linter
+## 🧪 Como Rodar os Testes e Linter
 
 Se desejar rodar a aplicação e os testes localmente (sem Docker), certifique-se de ter o Node 20+ instalado e execute:
 
