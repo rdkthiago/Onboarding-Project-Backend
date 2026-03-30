@@ -1,98 +1,69 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Onboarding API (Backend)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esta é a API RESTful responsável por gerenciar o fluxo de cadastro (Onboarding) de novos usuários. Desenvolvida com foco em **Clean Code**, **SOLID** e **Alta Disponibilidade**, a aplicação garante persistência incremental de dados, segurança com MFA e rotinas automatizadas para recuperação de cadastros abandonados.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tecnologias Utilizadas
 
-## Description
+* **Framework:** [NestJS](https://nestjs.com/) (Node.js v20+)
+* **Banco de Dados:** PostgreSQL
+* **ORM:** TypeORM
+* **Infraestrutura:** Docker & Docker Compose (Imagens Alpine)
+* **Documentação:** Swagger (OpenAPI)
+* **Testes:** Jest
+* **Padronização:** ESLint + Prettier configurados em modo estrito
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Arquitetura e Decisões Técnicas
 
-## Project setup
+O projeto foi estruturado para ser escalável e de fácil manutenção:
+* **Separação de Responsabilidades:** Toda a regra de negócio está encapsulada nos `Services`, mantendo os `Controllers` limpos.
+* **Inversão de Dependência (SOLID):** Integrações externas (ViaCEP e Resend) foram abstraídas através de interfaces (`ICepProvider`, `IMailProvider`). Isso permite a troca de fornecedores sem alterar o core da aplicação.
+* **Persistência Incremental:** Os dados são salvos a cada etapa concluída via requisições `PATCH`.
+* **Recuperação de Abandono (CronJob):** Uma rotina assíncrona (`@nestjs/schedule`) verifica periodicamente cadastros não concluídos e dispara e-mails de engajamento.
+* **Segurança Estrita:** Validação rigorosa de DTOs com `class-validator` e tipagem forte TypeScript (sem uso de `any`).
 
+## Pré-requisitos
+
+Para rodar o projeto de forma automatizada, você precisará ter instalado em sua máquina:
+* [Docker](https://www.docker.com/)
+* [Docker Compose](https://docs.docker.com/compose/)
+
+## Como Executar (Recomendado via Docker)
+
+A aplicação foi "dockerizada" para facilitar a avaliação, subindo o Banco de Dados e a API simultaneamente em containers isolados.
+
+**1. Clone o repositório**
 ```bash
-$ npm install
-```
+git clone https://github.com/rdkthiago/Onboarding-Project-Backend.git
+cd onboarding-backend
 
-## Compile and run the project
+**2. Configure as Variáveis de Ambiente**
+Crie um arquivo `.env` na raiz do projeto e adicione suas credenciais, especialmente a chave do Resend:
+DB_HOST=db
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=onboarding_db
+RESEND_API_KEY=sua_chave_aqui
 
-```bash
-# development
-$ npm run start
+**3. Suba os containers**
+docker-compose up -d --build
+*(O parâmetro `-d` roda os containers em segundo plano. A API estará disponível na porta `3000` e o PostgreSQL na porta `5433` para acesso externo).*
 
-# watch mode
-$ npm run start:dev
+## Documentação da API (Swagger)
 
-# production mode
-$ npm run start:prod
-```
+Com a aplicação rodando, acesse o link abaixo no seu navegador para visualizar o contrato completo da API, testar os endpoints e ver os schemas (DTOs):
 
-## Run tests
+**[http://localhost:3000/api/docs](http://localhost:3000/api/docs)**
 
-```bash
-# unit tests
-$ npm run test
+## Como Rodar os Testes e Linter
 
-# e2e tests
-$ npm run test:e2e
+Se desejar rodar a aplicação e os testes localmente (sem Docker), certifique-se de ter o Node 20+ instalado e execute:
 
-# test coverage
-$ npm run test:cov
-```
+# Instalar dependências
+npm install
 
-## Deployment
+# Rodar a suíte de testes unitários (Services e Controllers)
+npm run test
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Checar padronização de código
+npm run lint
