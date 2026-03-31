@@ -166,16 +166,16 @@ export class RegistrationService {
 
   private readonly logger = new Logger(RegistrationService.name);
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleAbandonmentEmails() {
     this.logger.log('Buscando cadastros abandonados...');
 
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const oneMinuteAgo = new Date(Date.now() - 1 * 60 * 1000);
 
     const abandonedRegistrations = await this.registrationRepository.find({
       where: {
         currentStep: Not(RegistrationStep.COMPLETED),
-        lastUpdatedAt: LessThan(oneHourAgo),
+        lastUpdatedAt: LessThan(oneMinuteAgo),
         abandonmentEmailSentAt: IsNull(),
       },
     });
